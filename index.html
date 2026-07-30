@@ -1,26 +1,448 @@
-<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17324D"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Фінанси"><link rel="apple-touch-icon" href="icon-192.png"><link rel="manifest" href="manifest.json"><title>Фінанси</title><style>
-:root{--bg:#f4f7fb;--card:#fff;--ink:#17212b;--muted:#667085;--primary:#17324d;--primary2:#315f7d;--accent:#1f8a70;--danger:#b42318;--border:#e3e8ef;--soft:#eef3f8}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}.app{max-width:760px;margin:0 auto}.hero{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:24px;padding:22px 18px;margin:12px 0 14px;box-shadow:0 12px 30px rgba(23,50,77,.22)}.hero h1{margin:0;font-size:28px}.hero p{margin:6px 0 0;opacity:.88}.balance{margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:14px}.balance small{opacity:.8}.balance b{display:block;font-size:30px;margin-top:4px}.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}.nav button{border:0;background:#fff;border-radius:15px;padding:11px 6px;font-weight:700;font-size:12px;color:var(--primary);box-shadow:0 3px 12px rgba(0,0,0,.05)}.nav button.active{background:var(--primary);color:#fff}.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 5px 18px rgba(0,0,0,.055)}.title{font-size:18px;font-weight:800;margin:0 0 12px}.grid{display:grid;gap:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}label{display:block;font-size:13px;font-weight:700;color:#475467;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid var(--border);border-radius:14px;padding:14px 13px;font-size:17px;background:#fff;color:var(--ink);outline:none}textarea{min-height:78px;resize:vertical}.amount{font-size:30px;font-weight:800;text-align:center}.btn{width:100%;border:0;border-radius:16px;padding:15px;font-size:17px;font-weight:800;background:var(--accent);color:#fff}.btn.primary{background:var(--primary)}.btn.light{background:var(--soft);color:var(--primary)}.btn.danger{background:#fee4e2;color:var(--danger)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#f8fafc;border:1px solid var(--border);border-radius:15px;padding:12px}.stat span{display:block;font-size:12px;color:var(--muted)}.stat b{display:block;font-size:18px;margin-top:5px}.item{padding:12px 0;border-bottom:1px solid #edf1f5}.item:last-child{border-bottom:0}.item-top{display:grid;grid-template-columns:1fr auto;gap:10px}.money{font-weight:800;white-space:nowrap}.expense{color:var(--danger)}.income{color:var(--accent)}.small{font-size:12px;color:var(--muted)}.chip{display:inline-block;background:#eef3f8;color:var(--primary);border-radius:999px;padding:4px 8px;font-size:11px;font-weight:700;margin:5px 5px 0 0}.item-actions{display:flex;gap:8px;margin-top:10px}.mini{border:0;border-radius:10px;padding:8px 10px;font-weight:700}.mini.edit{background:#eef3f8;color:var(--primary)}.mini.delete{background:#fee4e2;color:var(--danger)}.hidden{display:none!important}.empty{text-align:center;color:var(--muted);padding:28px 8px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.manage-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f5}.manage-row:last-child{border-bottom:0}.icon-btn{border:0;background:#f2f4f7;border-radius:11px;padding:9px 11px;font-size:15px}.lock{position:fixed;inset:0;background:linear-gradient(135deg,#17324d,#315f7d);display:flex;align-items:center;justify-content:center;padding:20px;z-index:999}.lock-card{width:min(420px,100%);background:#fff;border-radius:24px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}footer{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 26px}.version{font-weight:700}@media(max-width:560px){.two,.three,.actions{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.nav{grid-template-columns:repeat(2,1fr)}}
-</style></head><body>
-<div id="lockScreen" class="lock hidden"><div class="lock-card"><h2>Фінанси</h2><p class="small" style="font-size:14px">Введіть PIN-код</p><input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="PIN-код"><div style="height:10px"></div><button id="unlockBtn" class="btn primary">Увійти</button></div></div>
-<div class="app"><section class="hero"><h1>Фінанси</h1><p>Особисті та робочі гроші в одному місці</p><div class="balance"><small>Загальний баланс</small><b id="heroBalance">0 ₴</b></div></section>
-<nav class="nav"><button id="navHome" class="active">🏠 Головна</button><button id="navAdd">➕ Операція</button><button id="navHistory">📊 Історія</button><button id="navAccounts">💳 Рахунки</button><button id="navSettings">⚙️ Налаштування</button></nav>
-<section id="homeScreen"><div class="card"><h2 class="title">Підсумок</h2><div class="stats"><div class="stat"><span>Доходи</span><b id="homeIncome">0 ₴</b></div><div class="stat"><span>Витрати</span><b id="homeExpense">0 ₴</b></div><div class="stat"><span>Баланс</span><b id="homeBalance">0 ₴</b></div></div></div><div class="card"><h2 class="title">Баланс по компаніях</h2><div id="companySummary" class="empty">Компаній поки немає</div></div><div class="card"><h2 class="title">Останні операції</h2><div id="recentList" class="empty">Записів поки немає</div></div></section>
-<section id="addScreen" class="hidden"><div class="card"><h2 class="title" id="formTitle">Нова операція</h2><div class="grid"><div class="three"><div><label>Тип</label><select id="type"><option>Витрата</option><option>Надходження</option><option>Переказ</option></select></div><div><label>Компанія</label><select id="company"></select></div><div><label>Рахунок</label><select id="account"></select></div></div><div><label>Сума, грн</label><input id="amount" class="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00"></div><div class="two"><div><label>Категорія</label><select id="category"></select></div><div><label>Об'єкт / проєкт</label><input id="project" placeholder="Наприклад: школа №4"></div></div><div class="two"><div><label>Дата</label><input id="date" type="date"></div><div><label>Документ</label><select id="receipt"><option>Є чек</option><option>Фото чека</option><option>Без чека</option><option>Потрібно отримати</option></select></div></div><div><label>Коментар</label><textarea id="comment" placeholder="Що саме оплачено"></textarea></div><button id="saveBtn" class="btn">Зберегти операцію</button><button id="cancelEditBtn" class="btn light hidden">Скасувати редагування</button></div></div></section>
-<section id="historyScreen" class="hidden"><div class="card"><h2 class="title">Пошук і фільтри</h2><div class="grid"><input id="searchText" placeholder="Пошук за категорією, об'єктом або коментарем"><div class="three"><div><label>Компанія</label><select id="filterCompany"></select></div><div><label>Рахунок</label><select id="filterAccount"></select></div><div><label>Тип</label><select id="filterType"><option value="">Усі</option><option>Витрата</option><option>Надходження</option><option>Переказ</option></select></div></div></div></div><div class="card"><div class="actions"><button id="exportBtn" class="btn primary">Експорт CSV</button><button id="backupBtn" class="btn light">Резервна копія</button></div><div class="actions" style="margin-top:9px"><label class="btn light" style="text-align:center;cursor:pointer">Відновити копію<input id="restoreInput" type="file" accept=".json" style="display:none"></label><button id="clearBtn" class="btn danger">Очистити все</button></div></div><div class="card"><div id="historyList" class="empty">Записів поки немає</div></div></section>
-<section id="accountsScreen" class="hidden"><div class="card"><h2 class="title">Баланс по рахунках</h2><div id="accountSummary" class="empty">Рахунків поки немає</div></div><div class="card"><h2 class="title">Додати рахунок</h2><div class="two"><input id="newAccount" placeholder="Наприклад: Приват, mono, готівка"><button id="addAccountBtn" class="btn primary">Додати</button></div></div><div class="card"><div id="accountList"></div></div></section>
-<section id="settingsScreen" class="hidden"><div class="card"><h2 class="title">Компанії</h2><div class="two"><input id="newCompany" placeholder="Назва компанії або «Особисті»"><button id="addCompanyBtn" class="btn primary">Додати</button></div><div id="companyList" style="margin-top:10px"></div></div><div class="card"><h2 class="title">Категорії</h2><div class="two"><input id="newCategory" placeholder="Нова категорія"><button id="addCategoryBtn" class="btn primary">Додати</button></div><div id="categoryList" style="margin-top:10px"></div></div><div class="card"><h2 class="title">Безпека</h2><div class="two"><input id="newPin" type="password" inputmode="numeric" maxlength="6" placeholder="Новий PIN (4–6 цифр)"><button id="setPinBtn" class="btn primary">Зберегти PIN</button></div><div style="height:9px"></div><button id="removePinBtn" class="btn light">Вимкнути PIN</button></div></section>
-<footer>Дані зберігаються лише на цьому пристрої. Регулярно створюйте резервну копію.<br><span class="version">Версія 5.0</span></footer></div>
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#112A46">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Фінанси">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Фінанси</title>
+<style>
+:root{
+  --bg:#F5F7FB;--card:#FFFFFF;--ink:#182230;--muted:#7A8699;--line:#E7EBF1;
+  --navy:#112A46;--navy2:#284E72;--green:#1F8A70;--green-soft:#E9F6F2;
+  --red:#C23B3B;--red-soft:#FCECEC;--blue-soft:#EEF4FA;--shadow:0 14px 35px rgba(17,42,70,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{padding:env(safe-area-inset-top) 14px calc(88px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto}
+.top-card{
+  margin:12px 0 16px;padding:22px;border-radius:28px;color:#fff;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));box-shadow:0 18px 42px rgba(17,42,70,.24)
+}
+.top-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.brand h1{margin:0;font-size:29px;letter-spacing:-.5px}.brand p{margin:6px 0 0;opacity:.78;font-size:14px}
+.eye{border:0;background:rgba(255,255,255,.14);color:white;border-radius:14px;padding:10px 12px}
+.balance-label{margin-top:24px;font-size:13px;opacity:.75}
+.balance-value{font-size:36px;font-weight:850;margin-top:4px;letter-spacing:-1px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.quick button{border:0;border-radius:16px;padding:14px;font-weight:800}
+.quick .income-btn{background:#fff;color:var(--green)}
+.quick .expense-btn{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.16)}
+.section{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-title h2{margin:0;font-size:19px}.section-title button{border:0;background:none;color:var(--navy);font-weight:750}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{border:1px solid var(--line);background:#FBFCFE;border-radius:18px;padding:14px}
+.stat span{display:block;color:var(--muted);font-size:12px}.stat b{display:block;margin-top:6px;font-size:18px}
+.stat.income b{color:var(--green)}.stat.expense b{color:var(--red)}
+.list .item{padding:13px 0;border-bottom:1px solid var(--line)}.list .item:last-child{border-bottom:0}
+.item-main{display:grid;grid-template-columns:1fr auto;gap:12px}
+.item-title{font-weight:800}.item-meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.item-amount{font-weight:850;white-space:nowrap}.item-amount.income{color:var(--green)}.item-amount.expense{color:var(--red)}
+.tags{margin-top:7px}.tag{display:inline-block;margin:0 5px 4px 0;padding:4px 8px;border-radius:999px;background:var(--blue-soft);font-size:11px;color:var(--navy);font-weight:700}
+.item-actions{display:flex;gap:8px;margin-top:10px}
+.mini{border:0;border-radius:11px;padding:8px 10px;font-weight:750}
+.mini.edit{background:var(--blue-soft);color:var(--navy)}.mini.delete{background:var(--red-soft);color:var(--red)}
+.empty{text-align:center;color:var(--muted);padding:28px 8px}
+.screen{display:block}.hidden{display:none!important}
+.form-grid{display:grid;gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label{display:block;font-size:13px;font-weight:750;color:#526071;margin-bottom:6px}
+input,select,textarea{
+  width:100%;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:15px;
+  padding:14px 13px;font-size:16px;outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:#89A7C2;box-shadow:0 0 0 3px rgba(40,78,114,.10)}
+.amount{font-size:32px;font-weight:850;text-align:center}
+textarea{min-height:84px;resize:vertical}
+.primary,.secondary,.danger{
+  width:100%;border:0;border-radius:16px;padding:15px;font-weight:850;font-size:16px
+}
+.primary{background:var(--green);color:white}.secondary{background:var(--blue-soft);color:var(--navy)}.danger{background:var(--red-soft);color:var(--red)}
+.filter-grid{display:grid;gap:10px}
+.manage-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.manage-row:last-child{border-bottom:0}.manage-row button{border:0;border-radius:10px;padding:8px 10px}
+.summary-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.summary-row:last-child{border-bottom:0}
+.bottom-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+  background:rgba(245,247,251,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(231,235,241,.92)
+}
+.bottom-nav-inner{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.bottom-nav button{border:0;background:transparent;color:#6F7B8D;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:750}
+.bottom-nav button span{display:block;font-size:20px;margin-bottom:3px}.bottom-nav button.active{background:#EAF0F6;color:var(--navy)}
+.lock{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,var(--navy),var(--navy2))}
+.lock-card{width:min(420px,100%);background:white;border-radius:26px;padding:22px;box-shadow:0 26px 70px rgba(0,0,0,.28);text-align:center}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:8px 0 18px}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(14,29,45,.5);display:flex;align-items:flex-end;justify-content:center}
+.modal-card{width:min(760px,100%);background:white;border-radius:26px 26px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-head h2{margin:0}.close{border:0;background:var(--blue-soft);border-radius:12px;padding:9px 12px}
+@media(max-width:560px){
+  .two,.three{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="lockScreen" class="lock hidden">
+  <div class="lock-card">
+    <h2>Фінанси</h2>
+    <p style="color:var(--muted)">Введіть PIN-код</p>
+    <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="PIN-код">
+    <div style="height:10px"></div>
+    <button id="unlockBtn" class="primary">Увійти</button>
+  </div>
+</div>
+
+<div class="app">
+  <section id="homeScreen" class="screen">
+    <div class="top-card">
+      <div class="top-row">
+        <div class="brand"><h1>Фінанси</h1><p>Усі гроші в одному місці</p></div>
+        <button class="eye" id="toggleBalance">👁</button>
+      </div>
+      <div class="balance-label">Загальний баланс</div>
+      <div class="balance-value" id="heroBalance">0 ₴</div>
+      <div class="quick">
+        <button class="income-btn" id="quickIncome">＋ Дохід</button>
+        <button class="expense-btn" id="quickExpense">− Витрата</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="stats">
+        <div class="stat income"><span>Доходи</span><b id="homeIncome">0 ₴</b></div>
+        <div class="stat expense"><span>Витрати</span><b id="homeExpense">0 ₴</b></div>
+        <div class="stat"><span>Баланс</span><b id="homeBalance">0 ₴</b></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><h2>Компанії</h2><button id="goCompanies">Керувати</button></div>
+      <div id="companySummary" class="empty">Компаній поки немає</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><h2>Останні операції</h2><button id="goHistory">Усі</button></div>
+      <div id="recentList" class="empty">Записів поки немає</div>
+    </div>
+  </section>
+
+  <section id="historyScreen" class="screen hidden">
+    <div class="section">
+      <div class="section-title"><h2>Історія</h2></div>
+      <div class="filter-grid">
+        <input id="searchText" placeholder="Пошук за категорією, об'єктом або коментарем">
+        <div class="three">
+          <div><label>Компанія</label><select id="filterCompany"></select></div>
+          <div><label>Рахунок</label><select id="filterAccount"></select></div>
+          <div><label>Тип</label><select id="filterType"><option value="">Усі</option><option>Витрата</option><option>Надходження</option><option>Переказ</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div class="section"><div id="historyList" class="empty">Записів поки немає</div></div>
+  </section>
+
+  <section id="accountsScreen" class="screen hidden">
+    <div class="section">
+      <div class="section-title"><h2>Рахунки</h2></div>
+      <div id="accountSummary" class="empty">Рахунків поки немає</div>
+    </div>
+    <div class="section">
+      <div class="two">
+        <input id="newAccount" placeholder="Новий рахунок">
+        <button id="addAccountBtn" class="primary">Додати</button>
+      </div>
+      <div id="accountList" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section id="companiesScreen" class="screen hidden">
+    <div class="section">
+      <div class="section-title"><h2>Компанії</h2></div>
+      <div class="two">
+        <input id="newCompany" placeholder="Назва компанії або «Особисті»">
+        <button id="addCompanyBtn" class="primary">Додати</button>
+      </div>
+      <div id="companyList" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section id="settingsScreen" class="screen hidden">
+    <div class="section">
+      <div class="section-title"><h2>Категорії</h2></div>
+      <div class="two">
+        <input id="newCategory" placeholder="Нова категорія">
+        <button id="addCategoryBtn" class="primary">Додати</button>
+      </div>
+      <div id="categoryList" style="margin-top:10px"></div>
+    </div>
+    <div class="section">
+      <div class="section-title"><h2>Безпека</h2></div>
+      <div class="two">
+        <input id="newPin" type="password" inputmode="numeric" maxlength="6" placeholder="Новий PIN (4–6 цифр)">
+        <button id="setPinBtn" class="primary">Зберегти PIN</button>
+      </div>
+      <div style="height:9px"></div>
+      <button id="removePinBtn" class="secondary">Вимкнути PIN</button>
+    </div>
+    <div class="section">
+      <div class="section-title"><h2>Дані</h2></div>
+      <div class="two">
+        <button id="exportBtn" class="secondary">Експорт CSV</button>
+        <button id="backupBtn" class="secondary">Резервна копія</button>
+      </div>
+      <div style="height:9px"></div>
+      <label class="secondary" style="display:block;text-align:center;cursor:pointer">Відновити копію<input id="restoreInput" type="file" accept=".json" style="display:none"></label>
+      <div style="height:9px"></div>
+      <button id="clearBtn" class="danger">Очистити всі операції</button>
+    </div>
+  </section>
+
+  <div class="footer">Дані зберігаються на цьому пристрої · Версія 6.0</div>
+</div>
+
+<div id="entryModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="formTitle">Нова операція</h2><button class="close" id="closeModal">✕</button></div>
+    <div class="form-grid">
+      <div class="three">
+        <div><label>Тип</label><select id="type"><option>Витрата</option><option>Надходження</option><option>Переказ</option></select></div>
+        <div><label>Компанія</label><select id="company"></select></div>
+        <div><label>Рахунок</label><select id="account"></select></div>
+      </div>
+      <div><label>Сума, грн</label><input id="amount" class="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0,00"></div>
+      <div class="two">
+        <div><label>Категорія</label><select id="category"></select></div>
+        <div><label>Об'єкт / проєкт</label><input id="project" placeholder="Наприклад: школа №4"></div>
+      </div>
+      <div class="two">
+        <div><label>Дата</label><input id="date" type="date"></div>
+        <div><label>Документ</label><select id="receipt"><option>Є чек</option><option>Фото чека</option><option>Без чека</option><option>Потрібно отримати</option></select></div>
+      </div>
+      <div><label>Коментар</label><textarea id="comment" placeholder="Що саме оплачено"></textarea></div>
+      <button id="saveBtn" class="primary">Зберегти операцію</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button id="navHome" class="active"><span>🏠</span>Головна</button>
+    <button id="navHistory"><span>📊</span>Історія</button>
+    <button id="navAdd"><span>➕</span>Додати</button>
+    <button id="navAccounts"><span>💳</span>Рахунки</button>
+    <button id="navSettings"><span>⚙️</span>Ще</button>
+  </div>
+</nav>
+
 <script>
-const K={e:'finances_entries_v5',c:'finances_companies_v5',a:'finances_accounts_v5',g:'finances_categories_v5',p:'finances_pin_v5'};const D={c:['Особисті','Компанія 1'],a:['Готівка','Картка Приват','Картка mono','Рахунок компанії'],g:['Матеріали','Пальне','Оплата праці','Транспорт','Інструмент','Оренда','Податки та комісії','Закупівля товару','Послуги підрядників','Харчування','Автомобіль','Дім','Здоров'я','Кредити','Зарплата','Надходження від клієнта','Інше']};
-function migrate(){if(!localStorage.getItem(K.e)){let o=localStorage.getItem('finances_entries_v4')||localStorage.getItem('finances_entries_v3');if(o)localStorage.setItem(K.e,o)}if(!localStorage.getItem(K.c)){let o=localStorage.getItem('finances_companies_v4')||localStorage.getItem('finances_companies_v3');if(o)localStorage.setItem(K.c,o)}}migrate();let entries=JSON.parse(localStorage.getItem(K.e)||'[]'),companies=JSON.parse(localStorage.getItem(K.c)||JSON.stringify(D.c)),accounts=JSON.parse(localStorage.getItem(K.a)||JSON.stringify(D.a)),categories=JSON.parse(localStorage.getItem(K.g)||JSON.stringify(D.g)),editId=null;const $=id=>document.getElementById(id),money=v=>new Intl.NumberFormat('uk-UA',{style:'currency',currency:'UAH',maximumFractionDigits:2}).format(v||0),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-function persist(){localStorage.setItem(K.e,JSON.stringify(entries));localStorage.setItem(K.c,JSON.stringify(companies));localStorage.setItem(K.a,JSON.stringify(accounts));localStorage.setItem(K.g,JSON.stringify(categories))}function fill(id,items,all){let el=$(id),cur=el.value;el.innerHTML='';if(all!==undefined)el.add(new Option(all,''));items.forEach(x=>el.add(new Option(x,x)));if([...el.options].some(o=>o.value===cur))el.value=cur}function refresh(){fill('company',companies);fill('filterCompany',companies,'Усі компанії');fill('account',accounts);fill('filterAccount',accounts,'Усі рахунки');fill('category',categories)}function totals(list=entries){let i=list.filter(x=>x.type==='Надходження').reduce((s,x)=>s+Number(x.amount||0),0),e=list.filter(x=>x.type==='Витрата').reduce((s,x)=>s+Number(x.amount||0),0);return{income:i,expense:e,balance:i-e}}function bal(field,name){return totals(entries.filter(x=>x[field]===name)).balance}
-function update(){let t=totals();$('heroBalance').textContent=money(t.balance);$('homeIncome').textContent=money(t.income);$('homeExpense').textContent=money(t.expense);$('homeBalance').textContent=money(t.balance);renderRecent();$('companySummary').className='';$('companySummary').innerHTML=companies.map(c=>`<div class="manage-row"><b>${esc(c)}</b><span class="money">${money(bal('company',c))}</span></div>`).join('');renderAccountSummary()}
-function row(x){let sign=x.type==='Надходження'?'+':x.type==='Витрата'?'−':'',cls=x.type==='Надходження'?'income':x.type==='Витрата'?'expense':'';return `<div class="item"><div class="item-top"><div><div><b>${esc(x.category)}</b></div><div class="small">${esc(x.date||'')} · ${esc(x.company||'')}</div>${x.project?`<div class="small">${esc(x.project)}</div>`:''}${x.comment?`<div class="small">${esc(x.comment)}</div>`:''}<span class="chip">${esc(x.account||'Без рахунку')}</span><span class="chip">${esc(x.receipt||'')}</span></div><div class="money ${cls}">${sign} ${money(x.amount)}</div></div><div class="item-actions"><button class="mini edit" onclick="editEntry(${x.id})">✏️ Редагувати</button><button class="mini delete" onclick="deleteEntry(${x.id})">🗑️ Видалити</button></div></div>`}function renderRecent(){if(!entries.length){$('recentList').className='empty';$('recentList').innerHTML='Записів поки немає';return}$('recentList').className='';$('recentList').innerHTML=entries.slice(0,5).map(row).join('')}
-function renderAccountSummary(){$('accountSummary').className='';$('accountSummary').innerHTML=accounts.map(a=>`<div class="manage-row"><b>${esc(a)}</b><span class="money">${money(bal('account',a))}</span></div>`).join('')}function filtered(){let q=$('searchText').value.trim().toLowerCase();return entries.filter(x=>(!$('filterCompany').value||x.company===$('filterCompany').value)&&(!$('filterAccount').value||x.account===$('filterAccount').value)&&(!$('filterType').value||x.type===$('filterType').value)&&(!q||[x.category,x.project,x.comment,x.company,x.account].join(' ').toLowerCase().includes(q)))}function renderHistory(){let l=filtered();if(!l.length){$('historyList').className='empty';$('historyList').innerHTML='За вибраними умовами записів немає';return}$('historyList').className='';$('historyList').innerHTML=l.map(row).join('')}
-function renderManage(){$('companyList').innerHTML=companies.map((c,i)=>`<div class="manage-row"><b>${esc(c)}</b><button class="icon-btn" onclick="removeCompany(${i})">Видалити</button></div>`).join('');$('accountList').innerHTML=accounts.map((a,i)=>`<div class="manage-row"><b>${esc(a)}</b><button class="icon-btn" onclick="removeAccount(${i})">Видалити</button></div>`).join('');$('categoryList').innerHTML=categories.map((c,i)=>`<div class="manage-row"><b>${esc(c)}</b><button class="icon-btn" onclick="removeCategory(${i})">Видалити</button></div>`).join('')}
-function show(s){['home','add','history','accounts','settings'].forEach(x=>{$(x+'Screen').classList.toggle('hidden',x!==s);$('nav'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active',x===s)});if(s==='home')update();if(s==='history')renderHistory();if(s==='accounts'){renderAccountSummary();renderManage()}if(s==='settings')renderManage()}$('navHome').onclick=()=>show('home');$('navAdd').onclick=()=>{reset();show('add')};$('navHistory').onclick=()=>show('history');$('navAccounts').onclick=()=>show('accounts');$('navSettings').onclick=()=>show('settings');const today=()=>new Date().toISOString().slice(0,10);function reset(){editId=null;$('formTitle').textContent='Нова операція';$('saveBtn').textContent='Зберегти операцію';$('cancelEditBtn').classList.add('hidden');$('amount').value='';$('project').value='';$('comment').value='';$('date').value=today()}
-$('saveBtn').onclick=()=>{let amount=Number(($('amount').value||'').replace(',','.'));if(!amount||amount<=0){alert('Вкажіть суму');return}let d={id:editId||Date.now(),type:$('type').value,company:$('company').value,account:$('account').value,amount,category:$('category').value,project:$('project').value.trim(),date:$('date').value||today(),receipt:$('receipt').value,comment:$('comment').value.trim(),updatedAt:new Date().toISOString()};if(editId){let i=entries.findIndex(x=>x.id===editId);if(i>=0)entries[i]={...entries[i],...d}}else entries.unshift(d);persist();let was=!!editId;reset();update();alert(was?'Операцію оновлено':'Операцію збережено');show('home')};$('cancelEditBtn').onclick=()=>{reset();show('history')};window.editEntry=id=>{let x=entries.find(e=>e.id===id);if(!x)return;editId=id;$('type').value=x.type;$('company').value=x.company;$('account').value=x.account||accounts[0];$('amount').value=x.amount;$('category').value=x.category;$('project').value=x.project||'';$('date').value=x.date||today();$('receipt').value=x.receipt||'Є чек';$('comment').value=x.comment||'';$('formTitle').textContent='Редагування операції';$('saveBtn').textContent='Зберегти зміни';$('cancelEditBtn').classList.remove('hidden');show('add')};window.deleteEntry=id=>{let x=entries.find(e=>e.id===id);if(!x||!confirm(`Видалити операцію «${x.category}» на ${money(x.amount)}?`))return;entries=entries.filter(e=>e.id!==id);persist();update();renderHistory()};
-function add(input,list){let n=$(input).value.trim();if(!n){alert('Введіть назву');return}if(list.includes(n)){alert('Така назва вже є');return}list.push(n);$(input).value='';persist();refresh();renderManage();update()}$('addCompanyBtn').onclick=()=>add('newCompany',companies);$('addAccountBtn').onclick=()=>add('newAccount',accounts);$('addCategoryBtn').onclick=()=>add('newCategory',categories);window.removeCompany=i=>{let n=companies[i];if(entries.some(x=>x.company===n)){alert('Компанія використовується в операціях.');return}if(companies.length===1){alert('Має залишитися хоча б одна компанія');return}companies.splice(i,1);persist();refresh();renderManage();update()};window.removeAccount=i=>{let n=accounts[i];if(entries.some(x=>x.account===n)){alert('Рахунок використовується в операціях.');return}if(accounts.length===1){alert('Має залишитися хоча б один рахунок');return}accounts.splice(i,1);persist();refresh();renderManage();update()};window.removeCategory=i=>{let n=categories[i];if(entries.some(x=>x.category===n)){alert('Категорія використовується в операціях.');return}if(categories.length===1){alert('Має залишитися хоча б одна категорія');return}categories.splice(i,1);persist();refresh();renderManage()};['filterCompany','filterAccount','filterType','searchText'].forEach(id=>$(id).addEventListener(id==='searchText'?'input':'change',renderHistory));
-function dl(blob,name){let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}$('exportBtn').onclick=()=>{let l=filtered();if(!l.length){alert('Немає даних');return}let h=['Дата','Тип','Компанія','Рахунок','Категорія','Об'єкт / проєкт','Сума, грн','Документ','Коментар'],r=l.map(x=>[x.date,x.type,x.company,x.account,x.category,x.project,x.amount,x.receipt,x.comment]),q=v=>`"${String(v??'').replace(/"/g,'""')}"`,csv='﻿'+[h,...r].map(z=>z.map(q).join(';')).join('
-');dl(new Blob([csv],{type:'text/csv;charset=utf-8'}),`Фінанси_${today()}.csv`)};$('backupBtn').onclick=()=>dl(new Blob([JSON.stringify({version:5,created:new Date().toISOString(),companies,accounts,categories,entries},null,2)],{type:'application/json'}),`Фінанси_копія_${today()}.json`);$('restoreInput').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.entries)||!Array.isArray(d.companies))throw 0;if(confirm('Замінити поточні дані?')){entries=d.entries;companies=d.companies;accounts=d.accounts||D.a;categories=d.categories||D.g;persist();refresh();update();renderManage();renderHistory();alert('Дані відновлено')}}catch{alert('Невірний файл резервної копії')}e.target.value=''};$('clearBtn').onclick=()=>{if(confirm('Видалити всі операції?')){entries=[];persist();update();renderHistory()}};$('setPinBtn').onclick=()=>{let p=$('newPin').value.trim();if(!/^\d{4,6}$/.test(p)){alert('PIN має містити 4–6 цифр');return}localStorage.setItem(K.p,p);$('newPin').value='';alert('PIN збережено')};$('removePinBtn').onclick=()=>{localStorage.removeItem(K.p);alert('PIN вимкнено')};$('unlockBtn').onclick=()=>{if($('pinInput').value===localStorage.getItem(K.p)){$('lockScreen').classList.add('hidden');$('pinInput').value=''}else alert('Невірний PIN')};function initLock(){if(localStorage.getItem(K.p))$('lockScreen').classList.remove('hidden')}refresh();reset();renderManage();update();initLock();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-</script></body></html>
+const KEYS={entries:"finances_entries_v6",companies:"finances_companies_v6",accounts:"finances_accounts_v6",categories:"finances_categories_v6",pin:"finances_pin_v6",hide:"finances_hide_balance_v6"};
+const defaults={
+  companies:["Особисті","Компанія 1"],
+  accounts:["Готівка","Картка Приват","Картка mono","Рахунок компанії"],
+  categories:["Матеріали","Пальне","Оплата праці","Транспорт","Інструмент","Оренда","Податки та комісії","Закупівля товару","Послуги підрядників","Харчування","Автомобіль","Дім","Здоров'я","Кредити","Зарплата","Надходження від клієнта","Інше"]
+};
+function migrate(){
+  if(!localStorage.getItem(KEYS.entries)){
+    const old=localStorage.getItem("finances_entries_v5")||localStorage.getItem("finances_entries_v4")||localStorage.getItem("finances_entries_v3");
+    if(old)localStorage.setItem(KEYS.entries,old);
+  }
+  if(!localStorage.getItem(KEYS.companies)){
+    const old=localStorage.getItem("finances_companies_v5")||localStorage.getItem("finances_companies_v4")||localStorage.getItem("finances_companies_v3");
+    if(old)localStorage.setItem(KEYS.companies,old);
+  }
+  if(!localStorage.getItem(KEYS.accounts)){
+    const old=localStorage.getItem("finances_accounts_v5");if(old)localStorage.setItem(KEYS.accounts,old);
+  }
+  if(!localStorage.getItem(KEYS.categories)){
+    const old=localStorage.getItem("finances_categories_v5");if(old)localStorage.setItem(KEYS.categories,old);
+  }
+}
+migrate();
+
+let entries=JSON.parse(localStorage.getItem(KEYS.entries)||"[]");
+let companies=JSON.parse(localStorage.getItem(KEYS.companies)||JSON.stringify(defaults.companies));
+let accounts=JSON.parse(localStorage.getItem(KEYS.accounts)||JSON.stringify(defaults.accounts));
+let categories=JSON.parse(localStorage.getItem(KEYS.categories)||JSON.stringify(defaults.categories));
+let editId=null;
+const $=id=>document.getElementById(id);
+const money=v=>new Intl.NumberFormat("uk-UA",{style:"currency",currency:"UAH",maximumFractionDigits:2}).format(v||0);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function persist(){
+  localStorage.setItem(KEYS.entries,JSON.stringify(entries));
+  localStorage.setItem(KEYS.companies,JSON.stringify(companies));
+  localStorage.setItem(KEYS.accounts,JSON.stringify(accounts));
+  localStorage.setItem(KEYS.categories,JSON.stringify(categories));
+}
+function fillSelect(id,items,allLabel){
+  const el=$(id),current=el.value;el.innerHTML="";
+  if(allLabel!==undefined)el.add(new Option(allLabel,""));
+  items.forEach(x=>el.add(new Option(x,x)));
+  if([...el.options].some(o=>o.value===current))el.value=current;
+}
+function refreshSelects(){
+  fillSelect("company",companies);fillSelect("filterCompany",companies,"Усі компанії");
+  fillSelect("account",accounts);fillSelect("filterAccount",accounts,"Усі рахунки");
+  fillSelect("category",categories);
+}
+function totals(list=entries){
+  const income=list.filter(x=>x.type==="Надходження").reduce((s,x)=>s+Number(x.amount||0),0);
+  const expense=list.filter(x=>x.type==="Витрата").reduce((s,x)=>s+Number(x.amount||0),0);
+  return{income,expense,balance:income-expense};
+}
+function shown(v){return localStorage.getItem(KEYS.hide)==="1"?"••••••":money(v)}
+function updateSummary(){
+  const t=totals();
+  $("heroBalance").textContent=shown(t.balance);
+  $("homeIncome").textContent=shown(t.income);
+  $("homeExpense").textContent=shown(t.expense);
+  $("homeBalance").textContent=shown(t.balance);
+  renderRecent();renderCompanySummary();renderAccountSummary();
+}
+function entryHtml(x){
+  const sign=x.type==="Надходження"?"+":x.type==="Витрата"?"−":"";
+  const cls=x.type==="Надходження"?"income":x.type==="Витрата"?"expense":"";
+  return `<div class="item">
+    <div class="item-main">
+      <div>
+        <div class="item-title">${esc(x.category)}</div>
+        <div class="item-meta">${esc(x.date||"")} · ${esc(x.company||"")}${x.project?`<br>${esc(x.project)}`:""}${x.comment?`<br>${esc(x.comment)}`:""}</div>
+        <div class="tags"><span class="tag">${esc(x.account||"Без рахунку")}</span><span class="tag">${esc(x.receipt||"")}</span></div>
+      </div>
+      <div class="item-amount ${cls}">${sign} ${money(x.amount)}</div>
+    </div>
+    <div class="item-actions"><button class="mini edit" onclick="editEntry(${x.id})">Редагувати</button><button class="mini delete" onclick="deleteEntry(${x.id})">Видалити</button></div>
+  </div>`;
+}
+function renderRecent(){
+  if(!entries.length){$("recentList").className="empty";$("recentList").innerHTML="Записів поки немає";return}
+  $("recentList").className="list";$("recentList").innerHTML=entries.slice(0,5).map(entryHtml).join("");
+}
+function renderCompanySummary(){
+  if(!companies.length){$("companySummary").className="empty";$("companySummary").innerHTML="Компаній поки немає";return}
+  $("companySummary").className="";
+  $("companySummary").innerHTML=companies.map(c=>`<div class="summary-row"><b>${esc(c)}</b><span>${shown(totals(entries.filter(x=>x.company===c)).balance)}</span></div>`).join("");
+}
+function renderAccountSummary(){
+  if(!accounts.length){$("accountSummary").className="empty";$("accountSummary").innerHTML="Рахунків поки немає";return}
+  $("accountSummary").className="";
+  $("accountSummary").innerHTML=accounts.map(a=>`<div class="summary-row"><b>${esc(a)}</b><span>${shown(totals(entries.filter(x=>x.account===a)).balance)}</span></div>`).join("");
+}
+function filtered(){
+  const q=$("searchText").value.trim().toLowerCase();
+  return entries.filter(x=>
+    (!$("filterCompany").value||x.company===$("filterCompany").value)&&
+    (!$("filterAccount").value||x.account===$("filterAccount").value)&&
+    (!$("filterType").value||x.type===$("filterType").value)&&
+    (!q||[x.category,x.project,x.comment,x.company,x.account].join(" ").toLowerCase().includes(q))
+  );
+}
+function renderHistory(){
+  const list=filtered();
+  if(!list.length){$("historyList").className="empty";$("historyList").innerHTML="За вибраними умовами записів немає";return}
+  $("historyList").className="list";$("historyList").innerHTML=list.map(entryHtml).join("");
+}
+function renderManage(){
+  $("companyList").innerHTML=companies.map((c,i)=>`<div class="manage-row"><b>${esc(c)}</b><button onclick="removeCompany(${i})">Видалити</button></div>`).join("");
+  $("accountList").innerHTML=accounts.map((a,i)=>`<div class="manage-row"><b>${esc(a)}</b><button onclick="removeAccount(${i})">Видалити</button></div>`).join("");
+  $("categoryList").innerHTML=categories.map((c,i)=>`<div class="manage-row"><b>${esc(c)}</b><button onclick="removeCategory(${i})">Видалити</button></div>`).join("");
+}
+function show(screen){
+  ["home","history","accounts","companies","settings"].forEach(x=>$(x+"Screen").classList.toggle("hidden",x!==screen));
+  ["home","history","accounts","settings"].forEach(x=>$("nav"+x[0].toUpperCase()+x.slice(1)).classList.toggle("active",x===screen));
+  if(screen==="home")updateSummary();
+  if(screen==="history")renderHistory();
+  if(screen==="accounts"){renderAccountSummary();renderManage()}
+  if(screen==="companies")renderManage();
+  if(screen==="settings")renderManage();
+}
+$("navHome").onclick=()=>show("home");
+$("navHistory").onclick=()=>show("history");
+$("navAccounts").onclick=()=>show("accounts");
+$("navSettings").onclick=()=>show("settings");
+$("navAdd").onclick=()=>openModal();
+$("goHistory").onclick=()=>show("history");
+$("goCompanies").onclick=()=>show("companies");
+$("quickIncome").onclick=()=>openModal("Надходження");
+$("quickExpense").onclick=()=>openModal("Витрата");
+$("toggleBalance").onclick=()=>{localStorage.setItem(KEYS.hide,localStorage.getItem(KEYS.hide)==="1"?"0":"1");updateSummary()}
+function today(){return new Date().toISOString().slice(0,10)}
+function resetForm(){
+  editId=null;$("formTitle").textContent="Нова операція";$("saveBtn").textContent="Зберегти операцію";
+  $("amount").value="";$("project").value="";$("comment").value="";$("date").value=today();
+}
+function openModal(type){
+  resetForm();if(type)$("type").value=type;$("entryModal").classList.remove("hidden");
+}
+$("closeModal").onclick=()=>$("entryModal").classList.add("hidden");
+$("saveBtn").onclick=()=>{
+  const amount=Number(($("amount").value||"").replace(",","."));
+  if(!amount||amount<=0){alert("Вкажіть суму");return}
+  const now=new Date();
+  const data={id:editId||now.getTime(),type:$("type").value,company:$("company").value,account:$("account").value,amount,category:$("category").value,project:$("project").value.trim(),date:$("date").value||today(),receipt:$("receipt").value,comment:$("comment").value.trim(),updatedAt:now.toISOString()};
+  if(editId){const i=entries.findIndex(x=>x.id===editId);if(i>=0)entries[i]={...entries[i],...data}}else entries.unshift(data);
+  persist();$("entryModal").classList.add("hidden");updateSummary();renderHistory();
+}
+window.editEntry=id=>{
+  const x=entries.find(e=>e.id===id);if(!x)return;
+  editId=id;$("type").value=x.type;$("company").value=x.company;$("account").value=x.account||accounts[0];$("amount").value=x.amount;$("category").value=x.category;$("project").value=x.project||"";$("date").value=x.date||today();$("receipt").value=x.receipt||"Є чек";$("comment").value=x.comment||"";$("formTitle").textContent="Редагування";$("saveBtn").textContent="Зберегти зміни";$("entryModal").classList.remove("hidden");
+}
+window.deleteEntry=id=>{
+  const x=entries.find(e=>e.id===id);if(!x||!confirm(`Видалити операцію «${x.category}» на ${money(x.amount)}?`))return;
+  entries=entries.filter(e=>e.id!==id);persist();updateSummary();renderHistory();
+}
+function addUnique(inputId,list){
+  const n=$(inputId).value.trim();if(!n){alert("Введіть назву");return}
+  if(list.includes(n)){alert("Така назва вже є");return}
+  list.push(n);$(inputId).value="";persist();refreshSelects();renderManage();updateSummary();
+}
+$("addCompanyBtn").onclick=()=>addUnique("newCompany",companies);
+$("addAccountBtn").onclick=()=>addUnique("newAccount",accounts);
+$("addCategoryBtn").onclick=()=>addUnique("newCategory",categories);
+window.removeCompany=i=>{const n=companies[i];if(entries.some(x=>x.company===n)){alert("Компанія використовується в операціях.");return}if(companies.length===1){alert("Має залишитися хоча б одна компанія");return}companies.splice(i,1);persist();refreshSelects();renderManage();updateSummary()}
+window.removeAccount=i=>{const n=accounts[i];if(entries.some(x=>x.account===n)){alert("Рахунок використовується в операціях.");return}if(accounts.length===1){alert("Має залишитися хоча б один рахунок");return}accounts.splice(i,1);persist();refreshSelects();renderManage();updateSummary()}
+window.removeCategory=i=>{const n=categories[i];if(entries.some(x=>x.category===n)){alert("Категорія використовується в операціях.");return}if(categories.length===1){alert("Має залишитися хоча б одна категорія");return}categories.splice(i,1);persist();refreshSelects();renderManage()}
+["filterCompany","filterAccount","filterType","searchText"].forEach(id=>$(id).addEventListener(id==="searchText"?"input":"change",renderHistory));
+$("exportBtn").onclick=()=>{
+  const list=entries;if(!list.length){alert("Немає даних");return}
+  const h=["Дата","Тип","Компанія","Рахунок","Категорія","Об'єкт / проєкт","Сума, грн","Документ","Коментар"];
+  const rows=list.map(x=>[x.date,x.type,x.company,x.account,x.category,x.project,x.amount,x.receipt,x.comment]);
+  const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const csv="\uFEFF"+[h,...rows].map(r=>r.map(q).join(";")).join("\n");
+  download(new Blob([csv],{type:"text/csv;charset=utf-8"}),`Фінанси_${today()}.csv`);
+}
+$("backupBtn").onclick=()=>{
+  const data={version:6,created:new Date().toISOString(),companies,accounts,categories,entries};
+  download(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),`Фінанси_копія_${today()}.json`);
+}
+$("restoreInput").onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(!Array.isArray(d.entries)||!Array.isArray(d.companies))throw new Error();
+    if(confirm("Замінити поточні дані?")){
+      entries=d.entries;companies=d.companies;accounts=d.accounts||defaults.accounts;categories=d.categories||defaults.categories;
+      persist();refreshSelects();renderManage();updateSummary();renderHistory();
+    }
+  }catch{alert("Невірний файл резервної копії")}
+  e.target.value="";
+}
+$("clearBtn").onclick=()=>{if(confirm("Видалити всі операції?")){entries=[];persist();updateSummary();renderHistory()}}
+function download(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$("setPinBtn").onclick=()=>{const p=$("newPin").value.trim();if(!/^\d{4,6}$/.test(p)){alert("PIN має містити 4–6 цифр");return}localStorage.setItem(KEYS.pin,p);$("newPin").value="";alert("PIN збережено")}
+$("removePinBtn").onclick=()=>{localStorage.removeItem(KEYS.pin);alert("PIN вимкнено")}
+$("unlockBtn").onclick=()=>{if($("pinInput").value===localStorage.getItem(KEYS.pin)){$("lockScreen").classList.add("hidden");$("pinInput").value=""}else alert("Невірний PIN")}
+function initLock(){if(localStorage.getItem(KEYS.pin))$("lockScreen").classList.remove("hidden")}
+refreshSelects();resetForm();renderManage();updateSummary();initLock();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
